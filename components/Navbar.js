@@ -62,7 +62,7 @@ const Navbar =({cart , addToCart,removeFromCart,clearCart,subTotal}) => {
       </div>
       <div
         ref={ref}
-        className={`sidecart w-72 h-[100vh] absolute bg-violet-400 top-0 right-0 px-8 py-10 transhtmlForm transition-transhtmlForm ${Object.keys(cart).length ==0?'translate-x-full':'translate-x-0'}`}>
+        className={`sidecart w-90 overflow-y-scroll h-[100vh] absolute bg-violet-400 top-0 right-0 px-8 py-10 transhtmlForm transition-transhtmlForm ${Object.keys(cart).length ==0?'translate-x-full':'translate-x-0'}`}>
         <h2 className="font-bold tetxt-xl text-center">Shopping Cart</h2>
         <span
           onClick={toggleCart}
@@ -75,7 +75,7 @@ const Navbar =({cart , addToCart,removeFromCart,clearCart,subTotal}) => {
           </div> }
          { Object.keys(cart).map((k)=>{return <li key={k}>
             <div className="item flex my-3">
-              <div className="w-2/3 font-semibold">{cart[k].name}</div>
+              <div className="w-2/3 font-semibold">{cart[k].name}({cart[k].size}/{cart[k].variant})</div>
               <div className="w-1/3 flex font-semibold items-center justify-center text-lg">
                 <AiOutlineMinusCircle onClick={()=>{removeFromCart(k,1,cart[k].price,cart[k].name,cart[k].size,cart[k].variant)}} className=" cursor-pointer " />
                 <span className="mx-2 text-sm">{cart[k].qty}</span>
