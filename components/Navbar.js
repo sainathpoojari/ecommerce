@@ -7,11 +7,12 @@ import {
   AiFillCloseSquare,
   AiOutlinePlusCircle,
   AiOutlineMinusCircle,
+  
 } from "react-icons/ai";
 import { BsFillBagCheckFill } from "react-icons/bs";
+import {MdAccountCircle } from "react-icons/md";
 
-const Navbar = () => {
-  
+const Navbar =({cart , addToCart,removeFromCart,clearCart,subTotal}) => {
   const toggleCart = () => {
     if (ref.current.classList.contains("translate-x-full")) {
       ref.current.classList.remove("translate-x-full");
@@ -23,11 +24,11 @@ const Navbar = () => {
   };
   const ref = useRef();
   return (
-    <div className="flex flex-col md:flex-row md:justify-start justify-center items-center py-2 shadow-md">
+    <div className="flex flex-col md:flex-row md:justify-start justify-center items-center py-2 shadow-md sticky top-0 bg-white z-10">
       <div className="logo mx-5">
         <Link href={"/"}>
           <a>
-            <Image src="/main2.jpg" width={200} height={90} alt="" />
+            <Image src="/main2.png" width={200} height={90} alt="" />
           </a>
         </Link>
       </div>
@@ -56,13 +57,12 @@ const Navbar = () => {
         </ul>
       </div>
       <div
-        onClick={toggleCart}
-        className="cart absolute right-0 cursor-pointer top-4 mx-5">
-        <AiOutlineShoppingCart className="text-xl md:text-2xl" />
+        className="cart absolute right-0 cursor-pointer flex top-4 mx-5">
+    <Link href={'/login'}><a><MdAccountCircle className="text-2xl md:text-3xl mx-4 "/></a></Link>  <AiOutlineShoppingCart  onClick={toggleCart} className="text-2xl md:text-3xl" />
       </div>
       <div
         ref={ref}
-        className="sidecart w-72 h-full absolute bg-violet-400 top-0 right-0 px-8 py-10 transform transition-transform translate-x-full">
+        className={`sidecart w-72 h-[100vh] absolute bg-violet-400 top-0 right-0 px-8 py-10 transhtmlForm transition-transhtmlForm ${Object.keys(cart).length ==0?'translate-x-full':'translate-x-0'}`}>
         <h2 className="font-bold tetxt-xl text-center">Shopping Cart</h2>
         <span
           onClick={toggleCart}
@@ -70,23 +70,27 @@ const Navbar = () => {
           <AiFillCloseSquare />
         </span>
         <ol className="list-decimal font-semibold">
-          <li>
+          {Object.keys(cart).length===0 && <div className="my-4 text-center">
+            Your Cart is Empty
+          </div> }
+         { Object.keys(cart).map((k)=>{return <li key={k}>
             <div className="item flex my-3">
-              <div className="w-2/3 font-semibold">tshirts-wear the code</div>
+              <div className="w-2/3 font-semibold">{cart[k].name}</div>
               <div className="w-1/3 flex font-semibold items-center justify-center text-lg">
-                <AiOutlineMinusCircle className=" cursor-pointer " />
-                <span className="mx-2 text-sm">1</span>
-                <AiOutlinePlusCircle className=" cursor-pointer " />
+                <AiOutlineMinusCircle onClick={()=>{removeFromCart(k,1,cart[k].price,cart[k].name,cart[k].size,cart[k].variant)}} className=" cursor-pointer " />
+                <span className="mx-2 text-sm">{cart[k].qty}</span>
+                <AiOutlinePlusCircle onClick={()=>{addToCart(k,1,cart[k].price,cart[k].name,cart[k].size,cart[k].variant)}} className=" cursor-pointer " />
               </div>
             </div>
-          </li>
+          </li>})}
+          <div className='ml-2 my-2 total'>Total Price:{subTotal}</div>
         </ol>
         <div className="flex">
-          <button class="flex mx-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded text-sm">
+         <Link href={'/checkout'}><button className="flex mx-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded text-sm">
             <BsFillBagCheckFill className="m-1" />
             Checkout
-          </button>
-          <button class="flex mx-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded text-sm">
+          </button></Link> 
+          <button onClick={clearCart} className="flex mx-2 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded text-sm">
             Clear Cart
           </button>
         </div>
